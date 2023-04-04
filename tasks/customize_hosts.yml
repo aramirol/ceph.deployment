@@ -1,0 +1,39 @@
+---
+- name: Disable SELinux
+  ansible.posix.selinux:
+    state: disabled  
+
+- name: Disabling firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+    enabled: false
+
+- name: add global DNS entry in resolv config file
+  ansible.builtin.lineinfile:
+    path: /etc/NetworkManager/system-connections/ens192.nmconnection
+    regexp: '^dns='
+    line: "dns={{ dns_ip }};"
+
+- name: Reboot hosts
+  ansible.builtin.reboot: 
+
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+  ignore_errors: true
+
+- name: Reboot hosts
+  ansible.builtin.reboot: 
+
+- name: Ensure system-packages are installed
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ system_packages }}"
+
+- name: Ensure python packages are installed
+  ansible.builtin.pip:
+    name: "{{ pip_packages }}"
+    state: present

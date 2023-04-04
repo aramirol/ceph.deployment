@@ -1,0 +1,40 @@
+---
+- name: Ensure ceph repository is installed
+  ansible.builtin.dnf:
+    name: "{{ ceph_repository }}"
+    state: present
+
+- name: Ensure cephadm package is installed
+  ansible.builtin.dnf:
+    name: "{{ ceph_packages }}"
+    state: latest
+
+- name: Run bootstrap
+  ansible.builtin.shell: "cephadm bootstrap --mon-ip 192.168.1.117 --allow-fqdn-hostname > ceph_mon_deploy.log"
+
+- name: Get create monitor log
+  ansible.builtin.shell: "cat ceph_mon_deploy.log"
+  register: monitor
+
+- name: Show create monitor log
+  ansible.builtin.debug:
+    var: monitor.stdout_lines
+
+- name: Configure Ceph Repository
+  ansible.builtin.shell: "cephadm add-repo --release quincy"
+
+- name: Install Ceph commands
+  ansible.builtin.shell: "cephadm install ceph-common"
+
+- name: Get ceph version
+  ansible.builtin.shell: "ceph -v"
+  register: version
+
+- name: Show ceph version
+  ansible.builtin.debug:
+    var: version.stdout_lines
+    
+- name: Add free devices to Ceph OSD
+  ansible.builtin.shell: "ceph orch apply osd --all-available-devices"
+
+- pause: seconds=30

@@ -1,0 +1,29 @@
+---
+# defaults file for ceph.deployment
+
+system_packages:
+  - yum-utils
+  - tree
+  - vim
+  - git
+  - wget
+  - python3-pip
+
+pip_packages:
+  - pyvmomi
+
+# Packages Vars
+docker_packages: 
+  - docker-ce 
+  - docker-ce-cli 
+  - containerd.io 
+  - docker-compose-plugin
+
+docker_svc:
+  - docker
+
+ceph_repository:
+  - centos-release-ceph-quincy
+
+ceph_packages:
+  - cephadm

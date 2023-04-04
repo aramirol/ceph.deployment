@@ -1,0 +1,24 @@
+---
+# vars file for ceph.deployment
+
+# Custom deployment vars
+# Name of the remote primary host dedicated to Control-Plane node
+primary_cp_node: "k8s-control-plane-0.casare.int"
+
+# If True, the role will deploy more than one control-plane node
+deploy_cluster_control_plane: True
+
+# If True, the role will deploy the NGINX ingress controller
+deploy_ingress: True
+
+# Load Balancer name and port to deploy kubernetes with more than one node (control-plane or worker)
+lb_name: "lb.casare.int"
+lb_ip: "192.168.1.126"
+lb_port: "6443"
+
+# DNS server
+dns_name: "dns-server.casare.int"
+dns_ip: "192.168.1.1"
+
+# Kubernetes network deployment
+networking_url: "https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml"

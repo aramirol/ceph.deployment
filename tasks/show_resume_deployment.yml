@@ -1,0 +1,16 @@
+---
+- name: Check pods status
+  ansible.builtin.command: ceph status
+  register: status
+
+- name: Show check status
+  ansible.builtin.debug:
+    var: status.stdout_lines
+
+- ansible.builtin.debug:
+    msg:
+    - "* * * * * * * * *"
+    - ""
+    - "CONGRATULATION, your Ceph Storage is ready to enjoy"
+    - ""
+    - "* * * * * * * * *"
